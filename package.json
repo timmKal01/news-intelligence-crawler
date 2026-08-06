@@ -9,10 +9,13 @@
     },
     "scripts": {
         "start": "tsx src/main.ts",
+        "build": "tsc",
+        "start:prod": "node dist/main.js",
         "test": "tsx --test src/*.test.ts"
     },
     "dependencies": {
         "@extractus/article-extractor": "^8.0.9",
+        "apify": "^3.2.6",
         "rss-parser": "^3.13.0",
         "robots-parser": "^3.0.1"
     },

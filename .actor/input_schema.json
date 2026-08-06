@@ -1,0 +1,15 @@
+{
+    "title": "News Intelligence Crawler Input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "sources": {
+            "title": "Sources",
+            "type": "array",
+            "editor": "json",
+            "description": "List of sources to crawl. Each item is either { \"type\": \"rss\", \"name\": \"...\", \"feedUrl\": \"...\", \"keywordFilter\"?: [\"...\"] } or { \"type\": \"google-news\", \"name\": \"...\", \"query\": \"...\" }. Leave empty to use the built-in default source list (src/config.ts).",
+            "default": []
+        }
+    },
+    "required": []
+}

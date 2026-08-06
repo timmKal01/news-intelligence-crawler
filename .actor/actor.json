@@ -1,0 +1,12 @@
+{
+    "actorSpecification": 1,
+    "name": "news-intelligence-crawler",
+    "title": "News Intelligence Crawler",
+    "description": "Discover, fetch, parse, and deduplicate publicly available news articles from configurable RSS feeds and Google News search, respecting robots.txt.",
+    "version": "0.1",
+    "meta": {
+        "templateId": "custom-no-proxy"
+    },
+    "input": "./input_schema.json",
+    "dockerfile": "../Dockerfile"
+}
