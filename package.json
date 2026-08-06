@@ -1,0 +1,24 @@
+{
+    "name": "news-intelligence-crawler",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "description": "Minimal news discovery/fetch/parse/dedupe/store pipeline (MVP slice of the full engineering spec).",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "scripts": {
+        "start": "tsx src/main.ts",
+        "test": "tsx --test src/*.test.ts"
+    },
+    "dependencies": {
+        "@extractus/article-extractor": "^8.0.9",
+        "rss-parser": "^3.13.0",
+        "robots-parser": "^3.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.5.0",
+        "tsx": "^4.19.0",
+        "typescript": "^5.5.4"
+    }
+}
