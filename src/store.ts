@@ -4,6 +4,9 @@ import type { ParsedArticle } from './parser.js';
 const DEDUPE_STORE_NAME = 'article-fingerprints';
 const FINGERPRINTS_KEY = 'seen-fingerprints';
 
+/** Must match the event name configured in the Actor's pay-per-event pricing on Apify. */
+export const ARTICLE_STORED_EVENT = 'article-stored';
+
 export interface Store {
     hasFingerprint(fp: string): boolean;
     insert(article: ParsedArticle, sourceName: string, fp: string): Promise<void>;
@@ -42,6 +45,7 @@ export async function openStore(): Promise<Store> {
                 imageUrl: article.imageUrl,
                 discoveredAt: new Date().toISOString(),
             });
+            await Actor.charge({ eventName: ARTICLE_STORED_EVENT });
         },
         async close(): Promise<void> {
             if (dirty) {
