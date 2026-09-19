@@ -1,34 +1,22 @@
-# News Intelligence Crawler (MVP)
+# News & Brand Mention Monitor — RSS & Google News, Deduplicated
 
-An [Apify actor](https://apify.com). Minimal slice of the full
-[engineering spec](./docs/spec-source.md): discover → fetch → parse → dedupe
-→ store, for a handful of configurable sources. No NLP pipeline, no REST
-API — this proves the core loop before layering those on.
+Track new coverage of a brand, company, product, or keyword across RSS feeds
+and Google News search. Every run only returns articles it hasn't seen
+before — dedupe holds across scheduled runs, not just within one — so this
+is built to run on a schedule as a standing mention monitor, not a one-off
+scrape.
 
-## What's here
+## Who this is for
 
-- **Discovery**: RSS feeds and Google News RSS search, configurable via
-  Actor input (`sources`) or `src/config.ts` (used as the default when no
-  input is given).
-- **Fetching**: per-domain rate limiting, timeouts, exponential-backoff
-  retries on transient failures, a descriptive User-Agent, and a
-  `robots.txt` check before every article fetch. No proxy.
-- **Parsing**: title, author, publication, publish date, canonical URL, raw
-  HTML, and cleaned body text via `@extractus/article-extractor` (strips
-  nav/ads/cookie banners, then whitespace-normalized).
-- **Dedupe**: SHA-256 fingerprint over canonical URL + normalized title +
-  publish timestamp + body hash. The set of seen fingerprints lives in a
-  named, persistent Apify key-value store (`article-fingerprints`) so
-  dedupe holds across separate runs, not just within one.
-- **Storage**: accepted articles are pushed to the run's Apify dataset.
-
-## What's deliberately not here yet
-
-NLP (summary/entities/sentiment), the REST API, Prometheus metrics/alerts,
-Kubernetes/multi-cloud deployment, scheduling. Same architecture, add
-incrementally once validated against real sources.
+- **PR/comms teams** tracking new press coverage of their company or a campaign.
+- **Market researchers & analysts** watching a topic or competitor across many sources at once.
+- **Competitive intelligence** teams monitoring what's being published about competitors.
 
 ## Input
+
+| Field | Type | Description |
+|---|---|---|
+| `sources` | array | List of sources to pull from. Each item is either `{ "type": "rss", "name": "...", "feedUrl": "...", "keywordFilter"?: [...] }` or `{ "type": "google-news", "name": "...", "query": "..." }`. Leave empty to use a built-in default source list. |
 
 ```json
 {
@@ -39,40 +27,41 @@ incrementally once validated against real sources.
 }
 ```
 
-Leave `sources` empty (or omit it) to use the built-in defaults in
-`src/config.ts`. Note: a source's `robots.txt` gets checked per article at
-run time — a source that works today can start getting skipped if a
-publisher changes its policy; that's enforced by design, not a bug to route
-around.
-
 ## Output
 
-One dataset record per stored article: `url`, `canonicalUrl`, `title`,
-`author`, `publication`, `publishedAt`, `body` (cleaned text), `rawHtml`,
-`imageUrl`, `sourceName`, `fingerprint`, `discoveredAt`.
+One record per newly discovered article:
 
-## Run it locally
-
-```bash
-npm install
-npm start        # runs src/main.ts directly via tsx
+```json
+{
+  "url": "https://example.com/article",
+  "canonicalUrl": "https://example.com/article",
+  "title": "Example headline",
+  "author": "Jane Doe",
+  "publication": "Example News",
+  "publishedAt": "2026-09-18T12:00:00.000Z",
+  "body": "Cleaned article text...",
+  "imageUrl": "https://example.com/image.jpg",
+  "sourceName": "techcrunch",
+  "fingerprint": "sha256-hash",
+  "discoveredAt": "2026-09-19T08:00:00.000Z"
+}
 ```
 
-Or as the Actor would run it in production:
+## How it works
 
-```bash
-npm run build     # compiles src/ -> dist/
-npm run start:prod
-```
+Pulls from RSS feeds and Google News RSS search, checks `robots.txt` before
+fetching each article, and extracts clean title/author/body text (nav, ads,
+and cookie banners stripped). Each article is fingerprinted (canonical URL +
+title + publish time + body hash) against a persistent store, so re-running
+on a schedule only returns what's genuinely new — already-seen articles are
+skipped, not re-charged.
 
-## Test
+A source's `robots.txt` is checked per article at run time — if a publisher
+changes its policy, that source may start getting skipped. That's enforced
+by design, not a bug.
 
-```bash
-npm test
-```
+No proxy, no scraping beyond each source's own public RSS/search feed.
 
-## Configuring default sources
+## Related products
 
-Edit `src/config.ts` — add a `{ type: 'rss', name, feedUrl, keywordFilter? }`
-or `{ type: 'google-news', name, query }` entry. No other code changes
-needed. (Per-run overrides go through Actor input instead — see above.)
+- [Hacker News Keyword Tracker](https://github.com/timmKal01/hacker-news-keyword-tracker) — same mention-monitoring idea, scoped to Hacker News discussions instead of news coverage
