@@ -1,8 +1,8 @@
-# News & Brand Mention Monitor — RSS & Google News, Deduplicated
+# News & Brand Mention Monitor: RSS & Google News, Deduplicated
 
 Track new coverage of a brand, company, product, or keyword across RSS feeds
 and Google News search. Every run only returns articles it hasn't seen
-before — dedupe holds across scheduled runs, not just within one — so this
+before: dedupe holds across scheduled runs, not just within one: so this
 is built to run on a schedule as a standing mention monitor, not a one-off
 scrape.
 
@@ -53,10 +53,10 @@ Pulls from RSS feeds and Google News RSS search, checks `robots.txt` before
 fetching each article, and extracts clean title/author/body text (nav, ads,
 and cookie banners stripped). Each article is fingerprinted (canonical URL +
 title + publish time + body hash) against a persistent store, so re-running
-on a schedule only returns what's genuinely new — already-seen articles are
+on a schedule only returns what's genuinely new: already-seen articles are
 skipped, not re-charged.
 
-A source's `robots.txt` is checked per article at run time — if a publisher
+A source's `robots.txt` is checked per article at run time: if a publisher
 changes its policy, that source may start getting skipped. That's enforced
 by design, not a bug.
 
@@ -64,4 +64,4 @@ No proxy, no scraping beyond each source's own public RSS/search feed.
 
 ## Related products
 
-- [Hacker News Keyword Tracker](https://github.com/timmKal01/hacker-news-keyword-tracker) — same mention-monitoring idea, scoped to Hacker News discussions instead of news coverage
+- [Hacker News Keyword Tracker](https://github.com/timmKal01/hacker-news-keyword-tracker): same mention-monitoring idea, scoped to Hacker News discussions instead of news coverage

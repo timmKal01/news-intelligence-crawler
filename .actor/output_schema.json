@@ -1,6 +1,6 @@
 {
     "actorOutputSchemaVersion": 1,
-    "title": "Output schema of News & Brand Mention Monitor — RSS & Google News, Deduplicated",
+    "title": "Output schema of News & Brand Mention Monitor: RSS & Google News, Deduplicated",
     "description": "Results are pushed to the default dataset, one record per item.",
     "properties": {
         "results": {
