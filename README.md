@@ -62,6 +62,12 @@ by design, not a bug.
 
 No proxy, no scraping beyond each source's own public RSS/search feed.
 
+## Pricing note
+
+Billed per **new article stored**, not per source polled or per run, since
+the dedupe store means a re-run only ever charges for genuinely new
+coverage, never for an article you've already been charged for.
+
 ## Related products
 
 - [Hacker News Keyword Tracker](https://github.com/timmKal01/hacker-news-keyword-tracker): same mention-monitoring idea, scoped to Hacker News discussions instead of news coverage
