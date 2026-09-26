@@ -1,7 +1,7 @@
 {
     "actorSpecification": 1,
     "name": "news-intelligence-crawler",
-    "title": "News & Brand Mention Monitor: RSS & Google News, Deduplicated",
+    "title": "News Mention Monitor: RSS & Google News",
     "description": "Track new news coverage of a brand, company, or keyword across RSS feeds and Google News search, deduplicated across runs so you only see what's new. Built for PR/comms teams, market researchers, and competitive intelligence. No proxy.",
     "version": "0.1",
     "meta": {
@@ -9,5 +9,8 @@
     },
     "input": "./input_schema.json",
     "output": "./output_schema.json",
-    "dockerfile": "../Dockerfile"
+    "dockerfile": "../Dockerfile",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    }
 }
